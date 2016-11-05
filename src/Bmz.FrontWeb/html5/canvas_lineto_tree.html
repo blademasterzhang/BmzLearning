@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			body{
+				margin: 0
+			}
+		</style>
+		</head>
+	<body onload="draw('canvas')">
+		<canvas id="canvas" width="500px" height="500px"></canvas>
+	<script>
+			function drawTree(ctx,tree)
+			{
+				if(tree==null||tree.children==null)
+				{
+					return;
+				}
+				for (var i = 0 ; i < tree.children.length; i++) {
+					drawline(ctx,tree,tree.children[i]);
+					drawTree(ctx,tree.children[i])
+				}
+			}
+			function drawline(ctx,spoint,epoint)
+			{
+				drawPoint(ctx,spoint);
+				ctx.beginPath();
+				ctx.strokeStyle="rgba(0,0,255,0.8)"; 
+				ctx.moveTo(spoint.x,spoint.y);
+				ctx.lineTo(epoint.x,epoint.y);
+				ctx.closePath();
+				ctx.stroke();
+				//drawPoint(ctx,epoint);
+				drawArrow(ctx,spoint,epoint);
+				showMessageElm(epoint);
+			}
+			//画箭头  
+			function drawArrow(ctx,spoint,epoint)
+			{ 
+				ctx.beginPath();
+			  	ctx.translate(epoint.x,epoint.y);
+			  	//我的箭头本垂直向下，算出直线偏离Y的角，然后旋转 ,rotate是顺时针旋转的，所以加个负号  
+			  	var ang=(epoint.x-spoint.x)/(epoint.y-spoint.y);  
+			  	ang=Math.atan(ang);  
+			  	if(epoint.y-spoint.y >= 0){  
+			    	ctx.rotate(-ang);  
+			  	}else{ 
+			    	ctx.rotate(Math.PI-ang);//加个180度，反过来  
+			  	}   
+			  	ctx.moveTo(-5,-10);   
+			  	ctx.lineTo(0,-5);   
+			  	ctx.lineTo(5,-10);   
+			  	ctx.lineTo(0,0);
+			  	ctx.fillStyle="rgba(0,0,255,0.8)";
+			  	ctx.fill(); //箭头是个封闭图形  
+			  	ctx.closePath();
+			  	
+			  	if(epoint.y-spoint.y >= 0){
+			    	ctx.rotate(ang);  
+			  	}else{  
+			    	ctx.rotate(ang-Math.PI);//加个180度，反过来  
+			  	}  
+			  	ctx.translate(-epoint.x,-epoint.y);
+			}
+			function drawPoint(ctx,point)
+			{
+				ctx.beginPath();
+				ctx.arc(point.x,point.y,3,0,Math.PI*2,true);
+				ctx.closePath();
+				ctx.fillStyle="rgba(0,0,255,0.8)";
+				ctx.fill();
+			}
+			function showMessageElm(point)
+			{
+				var big=6;
+				var body= document.body;
+				var aelm=document.createElement("a");
+				aelm.setAttribute("title",point.msg);
+				aelm.setAttribute("href","#");
+				aelm.style.width=big+"px";
+				aelm.style.height=big+"px";
+				aelm.style.position="absolute";
+				aelm.style.left=(point.x-big/2)+"px";
+				aelm.style.top=(point.y-big/2)+"px";
+				body.appendChild(aelm); 
+			}
+			function draw(id)
+			{
+				var canvas=document.getElementById(id);
+				if(canvas==null)
+				{
+					return false;
+				}
+				var ctx= canvas.getContext("2d");
+				ctx.fillStyle="#eeeeef";
+				ctx.fillRect(0,0,canvas.width,canvas.height);
+
+				var treeData={};
+				treeData.x=150;
+				treeData.y=150;
+				treeData.msg="i am tree root";
+				treeData.children=[];
+				var elm1={x:100,y:200,msg:"i am elm1"};
+				treeData.children.push(elm1);
+				var elm2={x:200,y:200,msg:"i am elm2"};
+				treeData.children.push(elm2);
+
+				elm1.children=[];
+				var elm3={x:50,y:250,msg:"i am elm13"};
+				elm1.children.push(elm3);
+				var elm4={x:150,y:250,msg:"i am elm4"};
+				elm1.children.push(elm4);
+
+				elm2.children=[];
+				var elm5={x:250,y:250,msg:"i am elm5"};
+				elm2.children.push(elm5);
+				drawTree(ctx,treeData);
+			}
+
+		</script>
+	</body>
+</html>

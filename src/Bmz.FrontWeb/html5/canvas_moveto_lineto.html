@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<!--
+		-->
+		<script>
+			function draw(id)
+			{
+				var canvas=document.getElementById(id);
+				if(canvas==null)
+				{
+					return false;
+				}
+				var context= canvas.getContext("2d");
+				context.fillStyle="#eeeeef";
+				context.fillRect(0,0,canvas.width,canvas.height);
+
+				var num =parseInt(localStorage.num);
+				num+=1;
+				num = num%100;
+				localStorage.num=num;
+
+				var dx=150+num;
+				var dy=150+num;
+				var s=100;
+				context.beginPath();
+				context.fillStyle="rgba(255,0,0,0.75)";
+				context.strokeStyle="rgba(0,0,255,0,0.75)";
+				var x=Math.sin(0);
+				var y=Math.cos(0);
+				var dig=Math.PI/15*11;
+				for(var i=0;i<30;i++)
+				{
+					var x=Math.sin(i*dig);
+					var y=Math.cos(i*dig);
+					context.lineTo(dx+x*s,dy+y*s);
+				}
+				context.closePath();
+				context.fill();
+				context.stroke();
+			}
+			function Sport()
+			{
+				localStorage.num=0;
+				setInterval("draw('canvas')",10)
+			}
+		</script>
+	</head>
+	<body onload="Sport()">
+		<canvas id="canvas" width="500px" height="500px"></canvas>
+	</body>
+</html>

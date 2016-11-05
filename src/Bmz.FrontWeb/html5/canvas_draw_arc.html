@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<!--
+			http://www.w3school.com.cn/tags/canvas_arc.asp
+			中心：arc(100,75,50,0*Math.PI,1.5*Math.PI)
+			起始角：arc(100,75,50,0,1.5*Math.PI)
+			结束角：arc(100,75,50,0*Math.PI,1.5*Math.PI)
+		-->
+		<script>
+			function draw(id)
+			{
+				var canvas=document.getElementById(id);
+				if(canvas==null)
+				{
+					return false;
+				}
+				var context= canvas.getContext("2d");
+				context.fillStyle="#eeeeef";
+				context.fillRect(0,0,canvas.width,canvas.height);
+				for(var i=0;i<=10;i++)
+				{
+					context.beginPath();
+					context.arc(i*25,i*25,i*10,0,Math.PI*2,true);
+					context.closePath();
+					context.fillStyle="rgba(255,0,0,0.25)";
+					context.fill();
+					//context.strokeStyle="rgba(255,0,0,0.25)"
+					//context.stroke();
+				}
+			}
+		</script>
+	</head>
+	<body onload="draw('canvas')">
+		<canvas id="canvas" width="500px" height="500px"></canvas>
+	</body>
+</html>
